@@ -1,0 +1,8 @@
+{
+  "corpus_root": "/Users/you/Documents/resume-outputs",
+  "template": "/Users/you/Documents/resume-outputs/master/resume.docx",
+  "memory": "/Users/you/Documents/resume-outputs/RESUME.md",
+  "ledger": "/Users/you/Documents/resume-outputs/ledger.jsonl",
+  "owner_name": "Your Full Name",
+  "max_pages": 2
+}

@@ -1,0 +1,9 @@
+{
+  "skill_name": "resume-tailoring",
+  "_notes": "Run without the skill vs with the skill per skill-creator procedure. Description-optimizer step (run_loop.py) requires the `claude` CLI which may not exist in pi - treat that subtask as manual or skip it.",
+  "evals": [
+    {"id": 1, "prompt": "here's a JD for a desktop support role at a hospital system [paste]. tailor my resume", "assertions": ["verify_output.py exits 0", "pages == 2", "coverage == 100%", "styles.xml byte-identical to template", "template file mtime unchanged"]},
+    {"id": 2, "prompt": "tailor for this SOC analyst posting [paste] - heavy on SIEM and incident response", "assertions": ["security bullets promoted", "gaming/production skills line absent", "verify_output.py exits 0"]},
+    {"id": 3, "prompt": "[3 screenshot paths] tailor to this", "assertions": ["OCR ran", "no non-ASCII in output", "verify_output.py exits 0"]}
+  ]
+}
