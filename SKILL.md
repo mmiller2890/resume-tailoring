@@ -28,6 +28,11 @@ These override generic resume-industry conventions, including any instinct to po
 4. **Format = styles/numbering byte-identical.** Only text runs (`w:t`) change. Bullets clone existing bullets; skills lines clone existing skills lines. Enforced by `verify-format`.
 5. **2-page discipline.** Trim content, never fonts or margins.
 6. **Ask for the company name** when it is not evident; file as `outputs/<Company>/resume.docx` + `.pdf`.
+7. **Preserve a single employment timeline.** Before delivery, compare employer names, titles, locations, and dates with the Job history facts in `RESUME.md`. Do not carry forward stale date variants. If concurrent work is material, label it clearly; otherwise resolve the conflict with the user.
+8. **Keep the positioning focused.** Lead with the strongest recurring evidence: high-volume employee support, endpoint management, identity and access, onboarding and offboarding, escalations, documentation, and practical automation. Tailor the emphasis to the role instead of presenting every infrastructure, security, SaaS, AV, procurement, and cloud capability in every version.
+9. **Represent healthcare employer experience as healthcare IT.** Unless the job has no room for it, retain at least three bullets from any healthcare employer that name hospital departments or medical practices, physicians or clinical staff, clinical and administrative workflows, and time-sensitive support.
+10. **Include AI with evidence and restraint.** Every new resume needs a concise AI skills line or role bullet that reflects hands-on work: AI-assisted ticket correlation, self-help guidance, workflow automation, model evaluation, or internal tooling. Name the user's tools when relevant (Claude, ChatGPT, Ollama, OpenCode, Pi, Hermes, and open-source models), and pair automation with human review. Do not make AI the main story for ordinary IT-support roles.
+11. **Avoid skill inflation and repetition.** Use role-relevant tools only, remove duplicate skills categories, and keep every job description to at least three differentiated bullets. Prefer a short, auditable skills section over repeated keyword lists.
 
 ## Paths and config
 
