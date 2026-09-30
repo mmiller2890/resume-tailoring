@@ -211,7 +211,9 @@ class ToolkitTests(unittest.TestCase):
         self.assertTrue(self.audit(self.output)['passed'])
         with zipfile.ZipFile(self.output) as zf:
             document = ET.fromstring(zf.read('word/document.xml'))
-        paragraphs = [''.join(p.itertext()) for p in document.find(f'{{{W}}}body').findall(f'{{{W}}}p')]
+        body = document.find(f'{{{W}}}body')
+        assert body is not None, 'fixture output must contain a document body'
+        paragraphs = [''.join(p.itertext()) for p in body.findall(f'{{{W}}}p')]
         self.assertEqual(paragraphs[int(i)], 'Financial Practice: reconciliations, Excel')
         self.assertEqual(paragraphs.count('Communication: financial reporting'), 1)
         self.assertEqual(len(paragraphs), len(self.indices) + 1)
@@ -279,7 +281,9 @@ class ToolkitTests(unittest.TestCase):
                                          str(self.indices['bullet']): contribution}})
                 with zipfile.ZipFile(self.output) as zf:
                     document = ET.fromstring(zf.read('word/document.xml'))
-                paragraphs = [''.join(p.itertext()) for p in document.find(f'{{{W}}}body').findall(f'{{{W}}}p')]
+                body = document.find(f'{{{W}}}body')
+                assert body is not None, 'fixture output must contain a document body'
+                paragraphs = [''.join(p.itertext()) for p in body.findall(f'{{{W}}}p')]
                 self.assertEqual(paragraphs[self.indices['summary']], summary)
                 self.assertEqual(paragraphs[self.indices['bullet']], contribution)
                 gates = json.loads(self.run_script(VERIFY, self.output, skills, '--json'))
