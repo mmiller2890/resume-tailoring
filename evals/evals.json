@@ -1,9 +1,31 @@
 {
   "skill_name": "resume-tailoring",
-  "_notes": "Run without the skill vs with the skill per skill-creator procedure. Description-optimizer step (run_loop.py) requires the `claude` CLI which may not exist in pi - treat that subtask as manual or skip it.",
+  "_notes": "All candidates and employers are fictional. Run these prompts with the skill and compare edit decisions against the supplied facts. Mechanical tests are separate: bash scripts/smoke_test.sh --pdf. Before an agent artifact run, provide a compatible synthetic DOCX and isolated config; never use a real candidate's personal corpus. Do not infer unspecified credentials or duties.",
   "evals": [
-    {"id": 1, "prompt": "here's a JD for a desktop support role at a hospital system [paste]. tailor my resume", "assertions": ["verify_output.py exits 0", "pages == 2", "coverage == 100%", "styles.xml byte-identical to template", "template file mtime unchanged"]},
-    {"id": 2, "prompt": "tailor for this SOC analyst posting [paste] - heavy on SIEM and incident response", "assertions": ["security bullets promoted", "gaming/production skills line absent", "verify_output.py exits 0"]},
-    {"id": 3, "prompt": "[3 screenshot paths] tailor to this", "assertions": ["OCR ran", "no non-ASCII in output", "verify_output.py exits 0"]}
+    {
+      "id": 1,
+      "prompt": "Tailor my one-page resume for Staff Accountant at Fictional Ledger Co. Confirmed facts: I completed month-end close and account reconciliations, used Excel, and prepared financial reports. I have no CPA credential, QuickBooks experience, IT administration, or AI experience. JD: perform account reconciliations, assist month-end close, prepare financial reports, use Excel; QuickBooks is preferred. Keep my actual title Accounting Assistant and existing dates. The supplied synthetic template and config have max_pages=1. Make it keyword-rich without inventing experience.",
+      "assertions": ["summary foregrounds accounting rather than employee IT support", "actual Accounting Assistant title and dates preserved", "no CPA, AI, or IT administration claims", "QuickBooks remains a reported preferred-skill gap, not a claimed skill", "all five delivery gates pass only after any missing-term exemption is acknowledged", "pages <= configured max_pages", "source unchanged and format preserved"]
+    },
+    {
+      "id": 2,
+      "prompt": "Tailor my resume for a ward nurse role at Fictional Care Hospital. Confirmed facts: registered nurse with a current, candidate-confirmed RN license in the target jurisdiction; direct patient care, medication administration and care plans. I have no healthcare IT, endpoint support, or AI experience. JD: deliver bedside patient care, administer medication, maintain care plans, communicate with patients and the care team; current RN license required. Do not turn my clinical work into technology support. Use the supplied synthetic template and local config.",
+      "assertions": ["clinical patient-care evidence leads the summary and bullets", "no healthcare IT or AI claims introduced", "only the supplied license/status is stated", "no invented clinical specialty, software, caseload, or credential", "all five delivery gates pass", "source unchanged and format preserved"]
+    },
+    {
+      "id": 3,
+      "prompt": "Tailor my resume for Marketing Specialist at Fictional Campaign Co. Confirmed facts: actual title Marketing Coordinator; campaign copywriting and analytics; verified 15% engagement increase. No helpdesk, AI, Adobe, or administration experience is recorded. JD: create campaign copy, use analytics to improve engagement, collaborate on campaigns. Recruiter asks for a punchy summary and only two strong bullets. Keep my real title and dates. Use the supplied synthetic template and local config.",
+      "assertions": ["copywriting and analytics lead, not software-support framing", "verified 15% result retained without changing attribution", "no helpdesk, AI, Adobe or unsupported tooling added", "two evidenced bullets accepted without padding to three", "actual title and dates preserved", "all five delivery gates pass"]
+    },
+    {
+      "id": 4,
+      "prompt": "Tailor my resume for Elementary Teacher at Fictional Learning School. Confirmed facts: classroom teaching, lesson planning, assessment and differentiated instruction; a teaching license whose current status and jurisdiction are not yet confirmed. No AI, IT support, student score-improvement metric, or named learning platform is recorded. JD: deliver standards-aligned lessons, assess learning, differentiate instruction; active teaching license in the target jurisdiction required. Make it polished, but do not assume the license is active just because I have been a teacher. Use the supplied synthetic template and local config.",
+      "assertions": ["instructional competencies lead rather than IT troubleshooting", "license status/jurisdiction clarification requested or gap clearly reported", "no active-license claim without confirmation", "no AI, platform, or invented student-outcome metric added", "at most two focused intake questions", "mechanical gates do not imply the credential requirement is met"]
+    },
+    {
+      "id": 5,
+      "prompt": "Tailor my resume for IT Support Specialist at Fictional Systems Co. Confirmed facts: endpoint management, identity and access troubleshooting, and Python task automation; actual title IT Support Technician. Being an Okta administrator, SCIM, MFA policies, certifications, AI tools and metrics are not confirmed. JD: troubleshoot endpoints and access issues, improve support documentation, automate routine tasks in Python; Okta administration is preferred. Keep the existing title/dates and use the supplied synthetic template and local config. Please include every preferred term if you can.",
+      "assertions": ["confirmed endpoint/access/Python evidence foregrounded", "no inferred Okta/SCIM/MFA, certification, AI or metric claims", "unsupported preferred terms reported as gaps rather than stuffed into skills", "actual title/dates preserved", "all five delivery gates pass only after any missing-term exemption is acknowledged", "source unchanged and format preserved"]
+    }
   ]
 }

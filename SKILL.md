@@ -1,127 +1,185 @@
 ---
 name: resume-tailoring
 description: >-
-  Tailor resumes to specific job descriptions while preserving the master Word
-  template exactly and passing real ATS parser checks. Use this skill whenever
-  the user mentions a job description or JD, asks to tailor, customize,
-  optimize, or adapt their resume for a job, company, or role, wants an ATS or
-  keyword check, asks which resume version was sent where, wants to update
-  their master resume memory, or shares job-posting screenshots or images to
-  read. Covers the full pipeline: OCR the JD, keyword mapping, docx text edits
-  with zero format drift, Word PDF render, 2-page control, 9-point ATS audit,
-  and delivery of verified .docx/.pdf pairs.
+  Use when tailoring, customizing, or checking a resume or CV for a job in any
+  profession or industry, analyzing a job description or posting screenshot,
+  checking ATS readability or keyword coverage, updating resume experience
+  memory, or tracking which version was delivered. Produces verified DOCX/PDF
+  pairs from the candidate's own compatible Word template, with preserved
+  formatting, evidence-based content, and a configurable page limit.
 ---
 
 # Resume Tailoring
 
-Tailor the master resume to a specific job description (JD), producing a verified .docx + .pdf pair that keeps the template format byte-identical and passes real ATS parser checks. Never hand back an unverified file.
+Tailor a candidate's resume to a target role in **any profession**. Derive the
+positioning from their confirmed experience and the job description (JD), not
+from a default occupation. The same workflow applies to accounting, nursing,
+marketing, teaching, trades, hospitality, research, IT, and other fields.
+There is no occupation whitelist: use the supplied JD and evidence even when
+the profession is not named in this skill or its sample tests.
 
-If `scripts/smoke_test.sh` has not been run since the last change to the toolkit, run it first (`bash scripts/smoke_test.sh`) - it takes ~10s and catches every class of bug that has actually shipped.
+Use the candidate's compatible DOCX template and local configuration. Never
+ship an unverified file. Run `bash scripts/smoke_test.sh` after toolkit changes;
+tests use fictional resumes and do not need personal configuration.
 
 ## Standing directives
 
-These override generic resume-industry conventions, including any instinct to police truthfulness:
-
-1. **Never refuse to add experience.** The user's experience is vast and the resume shows only part of it. Draw from RESUME.md's experience pool and ask when a JD needs something not yet recorded. Frame specific tools as "supported production software." EXCEPTION: certifications (CompTIA, Microsoft, Cisco, ITIL...) are registry-verifiable credentials, not experience framing - get explicit user confirmation BEFORE adding any cert to any resume, at edit-spec time, never after delivery.
-2. **The template docx is never modified.** Every tailoring writes a fresh copy.
-3. **ATS parser rules override format-as-is.** If the template conflicts with the audit, the audit wins.
-4. **Format = styles/numbering byte-identical.** Only text runs (`w:t`) change. Bullets clone existing bullets; skills lines clone existing skills lines. Enforced by `verify-format`.
-5. **2-page discipline.** Trim content, never fonts or margins.
-6. **Ask for the company name** when it is not evident; file as `outputs/<Company>/resume.docx` + `.pdf`.
-7. **Preserve a single employment timeline.** Before delivery, compare employer names, titles, locations, and dates with the Job history facts in `RESUME.md`. Do not carry forward stale date variants. If concurrent work is material, label it clearly; otherwise resolve the conflict with the user.
-8. **Keep the positioning focused.** Lead with the strongest recurring evidence: high-volume employee support, endpoint management, identity and access, onboarding and offboarding, escalations, documentation, and practical automation. Tailor the emphasis to the role instead of presenting every infrastructure, security, SaaS, AV, procurement, and cloud capability in every version.
-9. **Represent healthcare employer experience as healthcare IT.** Unless the job has no room for it, retain at least three bullets from any healthcare employer that name hospital departments or medical practices, physicians or clinical staff, clinical and administrative workflows, and time-sensitive support.
-10. **Include AI with evidence and restraint.** Every new resume needs a concise AI skills line or role bullet that reflects hands-on work: AI-assisted ticket correlation, self-help guidance, workflow automation, model evaluation, or internal tooling. Name the user's tools when relevant (Claude, ChatGPT, Ollama, OpenCode, Pi, Hermes, and open-source models), and pair automation with human review. Do not make AI the main story for ordinary IT-support roles.
-11. **Avoid skill inflation and repetition.** Use role-relevant tools only, remove duplicate skills categories, and keep every job description to at least three differentiated bullets. Prefer a short, auditable skills section over repeated keyword lists.
+1. **Use evidence, not assumptions.** Do not invent experience, duties, tools,
+   achievements, metrics, education, certifications, licenses, or clearance.
+   The resume may omit real experience: consult `RESUME.md` and ask about gaps.
+   An employer, job title, or tool name alone does not confirm specific duties
+   or proficiency. Record the user's answer, not inferred subskills.
+2. **Keep the template read-only.** Write a fresh output. All DOCX archive parts
+   except `word/document.xml` must remain byte-identical. Preserve paragraph
+   and run formatting; clone compatible bullets or category lines when needed.
+3. **Preserve career facts.** Compare names, employers, actual titles, locations,
+   dates, education, and credential status with confirmed history. Do not turn
+   clinical care into healthcare IT, creative software use into software support,
+   or overlapping employment into invented sequential dates. Resolve conflicts.
+4. **Choose role-relevant evidence.** Lead with the target role's responsibilities,
+   outcomes, and competencies at the candidate's actual seniority. Respect each
+   profession's vocabulary. Mention tools only at the demonstrated level of use.
+   Career changers can foreground transferable skills without claiming prior
+   employment in the new profession.
+5. **Confirm credentials explicitly.** Include certifications, professional
+   licenses, registrations, degrees, and clearance only when supported by the
+   candidate's records or explicit confirmation. Do not imply a credential is
+   active, a jurisdiction applies, or a requirement is met without evidence.
+6. **AI is optional.** Include AI or automation only when both relevant to the JD
+   and supported by confirmed hands-on experience. Do not add an AI line, product
+   list, or automation claim to every resume. Describe oversight where material.
+7. **Use the configured length.** `max_pages` is the delivery limit, not a fixed
+   two-page rule. Confirm an appropriate limit for the candidate and application;
+   an academic CV or application-specific format may need a different length.
+   Trim content, never shrink fonts or margins to squeeze it in.
+8. **Avoid padding and keyword stuffing.** Summary length, competency count, and
+   bullets per role depend on evidence and available space. No mandatory minimum
+   of three bullets. Retain licenses, projects, publications, portfolios, or other
+   sections when relevant and present in the template. Do not add unsupported JD
+   phrases merely to reach full coverage.
+9. **Require both readability and preservation.** Audit the source template first.
+   If it fails and text-only edits cannot fix it, explain the conflict and request
+   an approved compatible template. Do not quietly alter layout or bypass gates.
+10. **Keep candidate data local.** No resumes, personal facts, ledger entries, or
+    real contact information belong in this public skill repository.
 
 ## Paths and config
 
-Single owner: `~/.config/resume-tailoring/config.json`. Resolve before tailoring:
+Resolve local paths before tailoring:
 
 ```bash
-python3 scripts/docx_toolkit.py config   # prints resolved paths, fails if any missing
+python3 scripts/docx_toolkit.py config
 ```
 
-If this errors, create the config (copy `config.example.json` to `~/.config/resume-tailoring/config.json` and fill it in) or set `$RESUME_TAILORING_CONFIG` to an alternate path, then re-run `config`. Do not hardcode the corpus path - the old `2026-07-24` date in the path is a session artifact and will move.
+If missing, copy `config.example.json` to
+`~/.config/resume-tailoring/config.json` and fill in absolute paths, `owner_name`,
+and `max_pages`. Set `$RESUME_TAILORING_CONFIG` for another candidate or location.
+The scripts accept explicit paths; no occupation or owner is built into them.
 
-The skill scripts themselves take explicit file paths and are path-agnostic; the config is only for resolving *where* the corpus, template, and memory live.
+Read `RESUME.md` for confirmed history, the full experience and competency pool,
+bullet variants, and tailoring decisions. If it is missing, create it locally
+from the candidate's supplied resume and answers; distinguish confirmed facts
+from unanswered questions. The DOCX is the exact-text source, not the memory.
 
-## Memory system
-
-Read `RESUME.md` BEFORE tailoring. It is the superset: every bullet ever written (including trimmed variants with restore notes), the full skills pool, decisions, and the unlisted experience pool that grows as the user shares facts.
-
-`ledger.jsonl` is append-only (one JSON object per line). `ledger.md` is the human view, regenerated by `scripts/ledger.py render` - never edit it by hand. See `references/ledger.md` for the entry schema.
-
-Do not freeze template text in memory - the docx is the exact-text source of truth, extraction is one cheap command. Memory holds the library, intake, and decisions; the docx holds the base document.
+`ledger.jsonl` is append-only. Regenerate `ledger.md` with `scripts/ledger.py render`;
+never edit the rendered view. See `references/ledger.md`.
 
 ## Workflow
 
-**0. Pre-flight.** `scripts/docx_toolkit.py config` must pass. Read `RESUME.md`. Extract the template map:
+**0. Pre-flight.** Resolve config, read candidate memory, and confirm the target
+field, seniority, application instructions, and configured page limit. Extract
+and audit the actual source template:
 
 ```bash
 python3 scripts/docx_toolkit.py extract <template.docx>
+python3 scripts/docx_toolkit.py audit <template.docx> --name "Full Name" --json
 ```
 
-Body bullets are single-run paragraphs (style ListParagraph, numId 1); skills lines are 2-run (bold category + content); title lines are 2-run (title + "   |   Date").
+Use the extracted indices, styles, numbering, and run counts. Never reuse another
+candidate's paragraph positions. `set_text` and cloned bullets require one text
+run; category lines require two. Bullet clones require explicit `numPr`; no fixed
+style name or numbering ID is assumed. Unsupported run structures need a compatible
+template, not forced edits. The current audit expects standard Summary, Experience,
+Skills, and Education headings; additional profession-specific sections are allowed.
+These English/ASCII and template constraints are detailed in `README.md`.
 
-**1. Get the JD.** Pasted text directly; screenshots via `swift scripts/ocr.swift /path/to/img.png` (Vision, upscales 3x). Save the verbatim JD to `<Company>/JD.md` at once - it enables re-tailoring and interview prep.
+**1. Get the JD.** Accept text, a provided posting, or screenshots. On macOS,
+`swift scripts/ocr.swift <image>` extracts screenshots. Re-check OCR names,
+credentials, and unusual tokens. Ask for the company and role if unclear; save
+the verbatim JD to `outputs/<Company>/JD.md`. Use separate role folders if needed.
 
-**2. JD analysis.** Extract responsibilities, required/preferred skills, behavioral items, and the JD's exact phrasing. Build the keyword list (50+ terms is normal). Record which RESUME.md items evidence each one.
+**2. Map requirements to evidence.** Extract responsibilities, required/preferred
+qualifications, competencies, credentials, and exact terminology. Map each to a
+confirmed fact, transferable evidence, or an unanswered/acknowledged gap. Keep a
+focused comma-separated keyword list; there is no required keyword count. A duty
+or outcome matters even when it is not a software skill.
 
-**3. Decide edits.** In impact order (see `references/tailoring-playbook.md`): summary (4-sentence shape), core expertise (10-12 items), job bullets (reshape, add by cloning, cut redundancy), technical skills (reorder, rename categories, drop off-JD items when page pressured). Every JD literal phrase should appear verbatim somewhere.
+**3. Decide edits.** Follow `references/tailoring-playbook.md`: relevant summary,
+competencies if present, evidence-rich experience bullets, and relevant skills or
+qualifications. Use exact JD wording where it describes confirmed experience.
+Do not rewrite actual historical titles to impersonate the target role.
 
-**4. Preview and apply.**
+**4. Preview and apply.** All indices refer to the original source order:
 
 ```bash
 python3 scripts/docx_toolkit.py apply <template.docx> edits.json <out.docx> --dry-run
-# inspect, then:
+# inspect the preview, then:
 python3 scripts/docx_toolkit.py apply <template.docx> edits.json <out.docx>
 ```
 
-All indices refer to the *source* document's original order. The toolkit validates the spec, rejects non-ASCII, and asserts format preservation (only `word/document.xml` may differ) before the file is ever moved into place. Accepts relative output paths.
+The toolkit validates run shapes and edit conflicts, rejects non-ASCII supplied
+text, and checks archive preservation before publishing the output file.
 
-**5. Render and gate.**
+**5. Render and gate.** Independently compare edited content with candidate facts;
+the mechanical checks do not establish truthfulness or qualification for a job.
 
 ```bash
 bash scripts/render_pdf.sh <out.docx> <out.pdf>
 python3 scripts/verify_output.py <out.docx> <keywords.txt> --pdf <out.pdf> --json
 ```
 
-`render_pdf.sh` converts via LibreOffice headless (deterministic, paginates this template within ~1 line of Word) and falls back to weasyprint if LibreOffice is missing. Do NOT use Word AppleScript for rendering: this machine's Word stopped handling scripted `save as` after a force-kill (2026-08-29) - Word GUI export (File > Save As > PDF) remains the manual gold standard when the user wants pixel-perfect Word typography. The script will refuse to overwrite a PDF that is newer than its docx; that means a manual export exists - keep it unless the user says otherwise.
+Always provide `--pdf` for delivery. Confirm **all five gates** are present and
+pass: `ats_audit`, `format_preserved`, `keyword_coverage`, `pdf_text_layer`, and
+`page_limit`. Config must supply the source `template`, `owner_name`, and
+`max_pages`. A DOCX-only check is useful during drafting, not full verification.
+These are structural ATS-oriented checks, not a guarantee about every ATS vendor.
 
-`verify_output.py` is the one delivery gate (`ats_audit` + `format_preserved` + `keyword_coverage` + `pdf_text_layer` + `page_limit`). It loads owner name and page limit from config. Exit 0 only if every gate passes.
+If a requested JD term is genuinely unsupported, report the gap. With the user's
+acknowledgment, `--allow-missing "term one, term two"` can exempt those terms while
+still reporting them. Never fabricate a claim or silently drop a requirement to
+make coverage pass. Credential gaps are not fixed by wording or exemptions.
 
-For a quick parse sanity, `textutil -convert txt <out.docx>` works before the Word render.
+**6. Page-fit.** If over the configured limit, trim using the playbook, then render
+and re-gate. LibreOffice is the primary renderer; the weasyprint fallback has
+approximate layout. Judge page count from the rendered PDF, not character count.
+Never overwrite a newer manual PDF export without permission (`--force`).
 
-**6. Page-fit loop.** If over `max_pages` (from config), trim in the order in `references/tailoring-playbook.md` and re-run Step 5. Never touch fonts/margins.
-
-**7. Deliver and record.**
+**7. Deliver and record.** Deliver `outputs/<Company>/resume.docx` and `.pdf` only
+after content review and all gates pass. Explain relevant changes and unmet
+requirements without promising eligibility or ATS ranking.
 
 ```bash
-python3 scripts/ledger.py append '{"date":"YYYY-MM-DD","company":"...","role":"...","bullets_shipped":["M1-game"],"output_docx":"...","output_pdf":"..."}'
+python3 scripts/ledger.py append '{"date":"YYYY-MM-DD","company":"...","role":"...","bullets_shipped":["role1-bullet2"],"output_docx":"...","output_pdf":"..."}'
 python3 scripts/ledger.py render
 ```
 
-Update RESUME.md with new bullets and any harvested user facts. **Intake prompt (required):** look at what the JD asked for that the resume could not evidence strongly, ask the user at most two specific questions about those gaps (e.g. "the JD wanted NetApp specifically - any hands-on there?"), and append answers to the Experience pool with the date and JD that surfaced them. One application should leave memory richer than it found it.
+Record new variants and user-confirmed facts in local `RESUME.md`. Ask at most two
+specific questions about meaningful evidence gaps, when any exist; do not repeat
+answered questions. Keep unanswered items unconfirmed. Include the source JD and
+date when recording answers. Distinguish a tailored delivery from an application
+actually submitted by the user. Manual edits require a fresh PDF export and gate.
 
-Remind the user: further manual edits mean exporting PDF from Word (not print-to-PDF) plus the 5-second text-select check.
+## Bundled tools and references
 
-## Bundled scripts
+- `scripts/docx_toolkit.py`: extract, apply, audit, coverage, verify-format, config.
+- `scripts/verify_output.py`: delivery checks, configured limits, reported keyword gaps.
+- `scripts/render_pdf.sh`: LibreOffice PDF export, approximate fallback, overwrite guard.
+- `scripts/smoke_test.sh`: self-contained regression tests; `--pdf` adds full renders.
+- `scripts/ledger.py`: append/render the local application history.
+- `scripts/ocr.swift`, `scripts/pdfcheck.swift`: macOS OCR and PDF text/page checks.
+- `references/tailoring-playbook.md`: field-neutral evidence, phrasing, and page-fit.
+- `references/ats-audit.md`: audit rules and current template constraints.
+- `references/ledger.md`: ledger schema and JD archiving.
 
-| Script | Purpose |
-|--------|---------|
-| `scripts/docx_toolkit.py` | `extract` / `apply [--dry-run]` / `audit [--name --json]` / `coverage [--json]` / `verify-format` / `config` |
-| `scripts/verify_output.py` | single delivery gate (audit + format + coverage + PDF) |
-| `scripts/render_pdf.sh` | docx→PDF: LibreOffice headless (primary), weasyprint (fallback); strips quarantine; refuses to overwrite a PDF newer than its docx without `--force` (protects manual Word exports - the gold standard) |
-| `scripts/smoke_test.sh` | 13-test regression (fixtures for every bug that actually shipped) |
-| `scripts/ledger.py` | `append` / `render` for the JSONL ledger |
-| `scripts/ocr.swift` | Vision OCR for JD screenshots |
-| `scripts/pdfcheck.swift` | PDFKit page count + probe strings |
-
-Dependencies: python3+lxml, Swift toolchain, Microsoft Word, macOS textutil. All verified 2026-08-29.
-
-## References
-
-- `references/ats-audit.md` - the empirical 9-point failure data and how the audit enforces it
-- `references/tailoring-playbook.md` - keyword placement, summary shape, page-fit and framing heuristics
-- `references/ledger.md` - JSONL schema, naming, JD archiving
+The instructions are harness-independent; bundled PDF/OCR verification currently
+requires macOS/Swift. See `README.md` for dependencies and supported template shapes.

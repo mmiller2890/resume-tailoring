@@ -1,4 +1,9 @@
-# STATUS: IMPLEMENTED 2026-08-29
+# Historical toolkit audit – implemented 2026-08-29
+
+This is an archived implementation plan, not current tailoring guidance. Its
+IT examples, template offsets, test counts, and workstation-specific notes are
+historical. Use `SKILL.md`, `README.md`, and the field-neutral playbook for current
+behavior; current smoke tests use fictional templates across professions.
 
 All 13 tasks from this plan were implemented. The four handoff-review corrections
 (canonical zip order, run-structure date scoping, joint glyph+font bullet check,

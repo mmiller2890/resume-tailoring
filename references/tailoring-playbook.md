@@ -1,37 +1,92 @@
 # Tailoring Playbook
 
-## Keyword placement (in impact order)
+## Start from the profession and evidence
 
-1. **Professional Summary** - 4 sentences, ~110-125 words: (a) scope/platforms, (b) diagnosis-troubleshooting-escalation (mirror JD verbs "coordinate, diagnose, troubleshoot"), (c) communication/stakeholders ("translates system concepts... builds direct relationships with business units"), (d) process/tools (SOPs, provisioning, workstation lifecycle, proactive monitoring, on-call). Cover the JD's required-responsibilities core here.
-2. **Core Expertise** - one plain pipe-separated line, 10-12 items, JD's strongest terms first. Drop items irrelevant to this JD (they live in RESUME.md).
-3. **Job bullets** - reshape to JD phrasing (present tense for current job, past elsewhere). Add bullets only where the JD has a requirement with no existing evidence - clone an existing bullet for formatting. Cut redundancy (same evidence at two jobs, keep the more relevant employer).
-4. **Technical Skills** - category lines: reorder by relevance, add JD tools to the right category, rename categories when the JD names a competency the template lacks. Drop off-JD items when page pressured.
+Read the target role, seniority, application instructions, candidate history, and
+confirmed facts before choosing a story. A healthcare employer does not make a
+nurse an IT specialist; an accounting title does not establish CPA status; using
+a creative application is not the same as supporting it. Ask about missing
+experience rather than treating related terms as proof.
 
-Exact-phrase matching: the JD's literal phrases ("first and second level support", "standard operating procedures") must appear verbatim somewhere - not just synonym-matched.
+Build a requirement-to-evidence map: confirmed achievement, transferable evidence,
+required credential, unanswered question, or acknowledged gap. Do not convert a
+gap into a claim. Use original job titles and dates; explain transitions through
+transferable outcomes, not invented employment.
 
-## Numbers and phrasing
+## Placement, in relevance order
 
-- Keep quantifiers prominent: 500+ endpoints, 1,000+ users, SLAs. They separate the candidate from helpdesk-only candidates.
-- For JD support levels, mirror the exact variant: "Tier 1 and Tier 2", "first and second level", "L2" - as the JD writes it.
+1. **Summary** – concise positioning grounded in the candidate's actual work:
+   relevant scope, strongest responsibilities/outcomes, and a differentiator.
+   There is no fixed sentence or word count. Avoid boilerplate and unsupported seniority.
+2. **Core competencies**, if present – a short set of relevant, evidenced terms.
+   No fixed item count and no new section unless the template supports it.
+3. **Experience** – action + scope/context + evidenced outcome. Use present tense
+   for ongoing work and past tense for completed work. Differentiate bullets;
+   clone a compatible bullet only for confirmed additional evidence. Older or
+   less-relevant roles can have fewer bullets; do not pad them to a quota.
+4. **Skills or competencies** – role-relevant methods, tools, professional practice,
+   languages, or other evidenced capabilities. Category names should match the
+   field, not automatically become Technical Skills.
+5. **Other qualifications**, where present and relevant – education, confirmed
+   licenses/certifications, projects, publications, portfolios, and awards.
+   Keep credential status and jurisdiction accurate; ask if they are unknown.
 
-## Page-fit (never fonts or margins)
+Use exact JD terminology when it faithfully describes confirmed experience.
+Not every JD phrase belongs in the resume. Required-but-unsupported terms remain
+visible gaps, not additions for a perfect coverage score.
 
-Trim in this order; re-render and re-gate after each round:
+## Field-specific emphasis – examples, not requirements
 
-1. Redundant bullets (same evidence at two jobs)
-2. Verbose filler ("in a fast-paced, high-volume environment")
-3. Core-expertise items also in Technical Skills
-4. Off-JD skills items (cloud/virtualization for a helpdesk JD, AV gear for a non-AV JD)
-5. Least-important bullet from the oldest job
+| Target role | Evidence to foreground, when confirmed |
+| --- | --- |
+| Accountant | Reconciliations, month-end close, financial reporting, controls, accuracy |
+| Nurse | Patient care, medication administration, care plans, relevant setting, active licensure |
+| Marketing specialist | Campaign work, copywriting, audience research, analytics, verified results |
+| Teacher | Lesson planning, assessment, differentiated instruction, student outcomes, licensure |
+| Skilled trades | Relevant craft, safety practices, completed work, equipment, required credentials |
+| Hospitality | Guest service, service recovery, scheduling, operational consistency |
+| Researcher | Methods, studies, publications, grants, collaboration, research outcomes |
+| IT specialist | Support scope, troubleshooting, endpoints, identity, automation, reliability |
 
-Pre-flight: `estimate_pages` from character count (~7,900 chars = exactly 2 pages for this template) avoids burning Word renders on obviously-over drafts. The render is still the ground truth.
+Do not insert the example competencies without candidate evidence. A title alone
+does not imply a license, a metric, or specific platform duties. AI is optional:
+include it only when relevant and confirmed; never turn it into every candidate's story.
 
-## Framing
+## Metrics and phrasing
 
-- Production/creative software (Maya, ZBrush, Visual Studio, Adobe) as "supported production software" - the support role's actual need - as a skills category title.
-- Gaming preference as a skills-line item ("PC and console gaming platforms and peripherals"), not a hobbies section.
-- Screenshot JDs: re-check odd OCR tokens ("users in peril" was "users in person" in context).
+Preserve verified quantities with their context: engagement change, accounts
+reconciled, class size, patient caseload, delivery volume, service scope, or other
+field-relevant measures. Do not invent numbers or claim sole responsibility for
+a team result. For sensitive clinical or client work, describe scope without
+identifying patients, students, or clients.
 
-## Decisions log
+Use accurate proficiency: used, supported, administered, designed, and led mean
+different things. Never reframe ordinary use as administration or ownership.
+Re-check OCR tokens, dates, credential names, and application instructions.
 
-RESUME.md's "Tailoring decisions worth remembering" is the durable form of these heuristics. When a choice matters for more than one tailoring, record it there.
+## Page-fit – preserve fonts and margins
+
+Use configured `max_pages` and the actual rendered PDF. Academic CVs and mandated
+application formats may require a different limit; do not assume two pages or
+estimate pagination from another candidate's character count.
+
+Trim in this order, then re-render and re-gate:
+
+1. Duplicate evidence and repeated keyword lists
+2. Filler and unnecessarily long summary/bullet phrasing
+3. Off-role skills and low-value competency items
+4. Less-relevant or old bullets, while retaining necessary chronology
+
+Do not cut a required, evidenced license or qualification before decorative text.
+If essential content still exceeds the limit, ask about an appropriate limit or
+approved template rather than shrinking the typography.
+
+## Content review and memory
+
+The mechanical gate does not check whether a statement is true. Before delivery,
+compare edited facts, metrics, titles, dates, education, and credential status
+with the candidate's records. Report gaps and uncertainty plainly.
+
+Record reusable bullet variants and decisions in local `RESUME.md`. Record the
+user's confirmed answers with date and JD; keep unanswered items and inferred
+subskills unconfirmed. Ask at most two specific intake questions when useful.
